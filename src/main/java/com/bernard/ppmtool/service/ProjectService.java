@@ -6,6 +6,8 @@ import com.bernard.ppmtool.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectService {
 
@@ -28,6 +30,10 @@ public class ProjectService {
             throw new ProjectIdExceptionHandler("Project identifier " + projectId + " does not exist");
         }
         return project;
+    }
+
+    public Iterable<Project> getAllProjects( ){
+         return projectRepository.findAll();
     }
 
 }
