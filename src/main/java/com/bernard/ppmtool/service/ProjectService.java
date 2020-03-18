@@ -6,8 +6,6 @@ import com.bernard.ppmtool.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ProjectService {
 
@@ -34,6 +32,24 @@ public class ProjectService {
 
     public Iterable<Project> getAllProjects( ){
          return projectRepository.findAll();
+    }
+
+    public void deleteProjectById(String projectId){
+        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
+        if(project == null){
+            throw new ProjectIdExceptionHandler("Project identifier " + projectId + " does not exist");
+        }
+        projectRepository.delete(project);
+    }
+
+    public void updateProjectById(Project requestProject, String projectId){
+        Project persistentProject = projectRepository.findByProjectIdentifier(projectId);
+        if(persistentProject == null){
+            throw new ProjectIdExceptionHandler("Project identifier " + projectId + " does not exist");
+        }
+        persistentProject.setDescription(requestProject.getDescription());
+        persistentProject.setProjectName(requestProject.getProjectName());
+        projectRepository.save(persistentProject);
     }
 
 }

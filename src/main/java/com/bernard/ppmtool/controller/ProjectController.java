@@ -41,4 +41,16 @@ public class ProjectController {
     public Iterable<Project> getAllProjects(){
         return projectService.getAllProjects();
     }
+
+    @RequestMapping(path = "/{projectId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteProjectById(@PathVariable String projectId){
+        projectService.deleteProjectById(projectId);
+        return new ResponseEntity<>("Project with project identifier " + projectId + " was deleted.", HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/{projectId}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateProjectById(@RequestBody Project project, @PathVariable String projectId){
+        projectService.updateProjectById(project, projectId);
+        return new ResponseEntity<>("Project with project identifier " + projectId + " was updated.", HttpStatus.OK);
+    }
 }
