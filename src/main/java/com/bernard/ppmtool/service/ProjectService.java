@@ -1,7 +1,9 @@
 package com.bernard.ppmtool.service;
 
+import com.bernard.ppmtool.domain.Backlog;
 import com.bernard.ppmtool.domain.Project;
 import com.bernard.ppmtool.exception.ProjectIdExceptionHandler;
+import com.bernard.ppmtool.repository.BacklogRepository;
 import com.bernard.ppmtool.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,9 +14,25 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private BacklogRepository backlogRepository;
+
     public Project saveOrUpdateProject(Project project){
         try{
-            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            String projectIdentifierInUpperCase = project.getProjectIdentifier().toUpperCase();
+            project.setProjectIdentifier(projectIdentifierInUpperCase);
+
+            if(project.getId() == null) {
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+                backlog.setProjectIdentifier(projectIdentifierInUpperCase);
+            }
+
+            if(project.getId() != null){
+                project.setBacklog(backlogRepository.findByProjectIdentifier(projectIdentifierInUpperCase));
+            }
+
             return projectRepository.save(project);
         }
         catch (Exception e){

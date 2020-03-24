@@ -1,6 +1,5 @@
 package com.bernard.ppmtool.domain;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
@@ -26,13 +25,17 @@ public class Project {
     @NotBlank(message = "Description is required")
     private String description;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    private Backlog backlog;
+
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date start_date;
 
     @JsonFormat(pattern = "yyyy-mm-dd")
-    private Date end_start;
+    private Date end_date;
 
     @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(updatable = false)
     private Date created_At;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
@@ -90,13 +93,14 @@ public class Project {
         this.start_date = start_date;
     }
 
-    public Date getEnd_start() {
-        return end_start;
+    public Date getEnd_date() {
+        return end_date;
     }
 
-    public void setEnd_start(Date end_start) {
-        this.end_start = end_start;
+    public void setEnd_date(Date end_date) {
+        this.end_date = end_date;
     }
+
 
     public Date getCreated_At() {
         return created_At;
@@ -113,4 +117,13 @@ public class Project {
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
     }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
+    }
+
 }
